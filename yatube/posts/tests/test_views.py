@@ -29,32 +29,27 @@ class PostPagesTests(TestCase):
 
     def test_pages_uses_correct_template(self):
         templates_pages_names = {
-            'posts/index.html': reverse('posts:index'),
+            reverse('posts:index'): 'posts/index.html',
 
-            'posts/group_list.html': (
-                reverse('posts:group_list',
-                        kwargs={'slug': PostPagesTests.group.slug})
-            ),
+            reverse('posts:group_list',
+                    kwargs={
+                        'slug': PostPagesTests.group.slug}): 'posts/group_list.html',
 
-            'posts/profile.html': (
-                reverse('posts:profile',
-                        kwargs={'username': PostPagesTests.user.username})
-            ),
+            reverse('posts:profile',
+                    kwargs={
+                        'username': PostPagesTests.user.username}): 'posts/profile.html',
 
-            'posts/create_post.html': reverse('posts:post_create'),
+            reverse('posts:post_create'): 'posts/create_post.html',
 
-            'posts/post_detail.html': (
-                reverse('posts:post_detail',
-                        kwargs={'post_id': PostPagesTests.post.id})
-            ),
+            reverse('posts:post_detail',
+                    kwargs={
+                        'post_id': PostPagesTests.post.id}): 'posts/post_detail.html',
 
-            'posts/create_post.html': (
-                reverse('posts:post_edit',
-                        kwargs={'post_id': self.post.id})
-            ),
+            reverse('posts:post_edit',
+                    kwargs={'post_id': self.post.id}): 'posts/create_post.html',
         }
 
-        for template, reverse_name in templates_pages_names.items():
+        for reverse_name, template in templates_pages_names.items():
             with self.subTest(reverse_name=reverse_name):
                 response = self.authorized_client.get(reverse_name)
                 self.assertTemplateUsed(response, template)
