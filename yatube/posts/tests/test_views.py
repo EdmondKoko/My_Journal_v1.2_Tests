@@ -32,21 +32,25 @@ class PostPagesTests(TestCase):
             'posts/index.html': reverse('posts:index'),
 
             'posts/group_list.html': (
-                reverse('posts:group_list', kwargs={'slug': PostPagesTests.group.slug})
+                reverse('posts:group_list',
+                        kwargs={'slug': PostPagesTests.group.slug})
             ),
 
             'posts/profile.html': (
-                reverse('posts:profile', kwargs={'username': PostPagesTests.user.username})
+                reverse('posts:profile',
+                        kwargs={'username': PostPagesTests.user.username})
             ),
 
             'posts/create_post.html': reverse('posts:post_create'),
 
             'posts/post_detail.html': (
-                reverse('posts:post_detail', kwargs={'post_id': PostPagesTests.post.id})
+                reverse('posts:post_detail',
+                        kwargs={'post_id': PostPagesTests.post.id})
             ),
 
             'posts/create_post.html': (
-                reverse('posts:post_edit', kwargs={'post_id': PostPagesTests.post.id})
+                reverse('posts:post_edit',
+                        kwargs={'post_id': PostPagesTests.post.id})
             ),
         }
 
@@ -115,9 +119,11 @@ class PostPaginatorTests(TestCase):
         paginator_list = {
             'posts:index': reverse('posts:index'),
             'posts:group_list': reverse(
-                'posts:group_list', kwargs={'slug': PostPaginatorTests.group.slug}),
+                'posts:group_list',
+                kwargs={'slug': PostPaginatorTests.group.slug}),
             'posts:profile': reverse(
-                'posts:profile', kwargs={'username': PostPaginatorTests.user.username}),
+                'posts:profile',
+                kwargs={'username': PostPaginatorTests.user.username}),
         }
         for template, reverse_name in paginator_list.items():
             response = self.guest_client.get(reverse_name)
@@ -127,9 +133,11 @@ class PostPaginatorTests(TestCase):
         paginator_list = {
             'posts:index': reverse('posts:index') + '?page=2',
             'posts:group_list': reverse(
-                'posts:group_list', kwargs={'slug': PostPaginatorTests.group.slug}) + '?page=2',
+                'posts:group_list',
+                kwargs={'slug': PostPaginatorTests.group.slug}) + '?page=2',
             'posts:profile': reverse(
-                'posts:profile', kwargs={'username': PostPaginatorTests.user.username}) + '?page=2',
+                'posts:profile',
+                kwargs={'username': PostPaginatorTests.user.username}) + '?page=2',
         }
         for template, reverse_name in paginator_list.items():
             response = self.guest_client.get(reverse_name)
