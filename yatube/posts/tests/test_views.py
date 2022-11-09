@@ -50,7 +50,7 @@ class PostPagesTests(TestCase):
 
             'posts/create_post.html': (
                 reverse('posts:post_edit',
-                        kwargs={'post_id': PostPagesTests.post.id})
+                        kwargs={'post_id': self.post.id})
             ),
         }
 
@@ -137,7 +137,8 @@ class PostPaginatorTests(TestCase):
                 kwargs={'slug': PostPaginatorTests.group.slug}) + '?page=2',
             'posts:profile': reverse(
                 'posts:profile',
-                kwargs={'username': PostPaginatorTests.user.username}) + '?page=2',
+                kwargs={'username': PostPaginatorTests.user.username}
+            ) + '?page=2',
         }
         for template, reverse_name in paginator_list.items():
             response = self.guest_client.get(reverse_name)
