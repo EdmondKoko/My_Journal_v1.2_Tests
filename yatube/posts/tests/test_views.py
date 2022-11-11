@@ -130,7 +130,8 @@ class PostPaginatorTests(TestCase):
         }
         for template, reverse_name in paginator_list.items():
             response = self.client.get(reverse_name)
-            self.assertEqual(len(response.context['page_obj']), PAGINATOR_POSTS)
+            self.assertEqual(len(response.context['page_obj']),
+                             PAGINATOR_POSTS)
 
     def test_second_page_contains_ten_posts(self):
         paginator_list = {
