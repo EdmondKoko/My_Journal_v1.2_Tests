@@ -3,11 +3,14 @@ from django.test import Client, TestCase
 from django.urls import reverse
 
 from ..models import Post, Group
+from ..views import PAGINATOR_POSTS
 
 User = get_user_model()
 
+PAGINATOR_COUNT = 13
 
-class PostPagesTests(TestCase):
+
+class PostViewsTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -23,7 +26,7 @@ class PostPagesTests(TestCase):
         )
 
     def setUp(self):
-        self.guest_client = Client()
+        self.client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
@@ -33,19 +36,19 @@ class PostPagesTests(TestCase):
 
             reverse('posts:group_list',
                     kwargs={
-                        'slug': PostPagesTests.group.slug}
+                        'slug': PostViewsTests.group.slug}
                     ): 'posts/group_list.html',
 
             reverse('posts:profile',
                     kwargs={
-                        'username': PostPagesTests.user.username}
+                        'username': PostViewsTests.user.username}
                     ): 'posts/profile.html',
 
             reverse('posts:post_create'): 'posts/create_post.html',
 
             reverse('posts:post_detail',
                     kwargs={
-                        'post_id': PostPagesTests.post.id}
+                        'post_id': PostViewsTests.post.id}
                     ): 'posts/post_detail.html',
 
             reverse('posts:post_edit',
@@ -61,6 +64,7 @@ class PostPagesTests(TestCase):
     def post_fields(self, post):
         with self.subTest(post=post):
             self.assertEqual(post.text, self.post.text)
+            self.assertEqual(post.id, self.post.id)
             self.assertEqual(post.author, self.post.author)
             self.assertEqual(post.group.id, self.post.group.id)
 
@@ -110,7 +114,7 @@ class PostPaginatorTests(TestCase):
             )
 
     def setUp(self):
-        self.guest_client = Client()
+        self.client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
@@ -125,8 +129,8 @@ class PostPaginatorTests(TestCase):
                 kwargs={'username': PostPaginatorTests.user.username}),
         }
         for template, reverse_name in paginator_list.items():
-            response = self.guest_client.get(reverse_name)
-            self.assertEqual(len(response.context['page_obj']), 10)
+            response = self.client.get(reverse_name)
+            self.assertEqual(len(response.context['page_obj']), PAGINATOR_POSTS)
 
     def test_second_page_contains_ten_posts(self):
         paginator_list = {
@@ -140,5 +144,6 @@ class PostPaginatorTests(TestCase):
             ) + '?page=2',
         }
         for template, reverse_name in paginator_list.items():
-            response = self.guest_client.get(reverse_name)
-            self.assertEqual(len(response.context['page_obj']), 3)
+            response = self.client.get(reverse_name)
+            self.assertEqual(len(response.context['page_obj']),
+                             PAGINATOR_COUNT - PAGINATOR_POSTS)

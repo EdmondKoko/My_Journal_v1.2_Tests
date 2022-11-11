@@ -5,11 +5,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PostForm
 from .models import Post, Group, User
 
-PAGINATOR_COUNT = 10
+PAGINATOR_POSTS = 10
 
 
 def paginator(request, posts):
-    paginator = Paginator(posts, PAGINATOR_COUNT)
+    paginator = Paginator(posts, PAGINATOR_POSTS)
     page_number = request.GET.get('page')
     return paginator.get_page(page_number)
 
