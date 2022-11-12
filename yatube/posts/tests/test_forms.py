@@ -69,3 +69,5 @@ class PostFormTests(TestCase):
         self.post = Post.objects.get(id=self.post.id)
 
         self.assertEqual(self.post.text, form_data['text'])
+
+        self.assertEqual(self.post.group.id, form_data['group'])

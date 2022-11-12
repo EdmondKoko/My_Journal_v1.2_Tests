@@ -22,20 +22,19 @@ class PostUrlsTest(TestCase):
         )
 
     def setUp(self):
-        self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
     def test_guest_pages(self):
         url_names = (
-            '/',
-            '/group/slug/',
-            '/profile/StasBasov/',
-            '/posts/1/',
+            f'/',
+            f'/group/{self.group.slug}/',
+            f'/profile/{self.user.username}/',
+            f'/posts/{self.post.id}/',
         )
         for address in url_names:
             with self.subTest():
-                response = self.guest_client.get(address)
+                response = self.client.get(address)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_post_create_url(self):
@@ -47,15 +46,15 @@ class PostUrlsTest(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_post_create_url_redirect(self):
-        response = self.guest_client.get('/create/')
+        response = self.client.get('/create/')
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
 
     def test_post_edit_url_redirect(self):
-        response = self.guest_client.get(f'/posts/{self.post.id}/edit/')
+        response = self.client.get(f'/posts/{self.post.id}/edit/')
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
 
     def test_page_404(self):
-        response = self.guest_client.get('/notfound/')
+        response = self.client.get('/notfound/')
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_urls_template(self):
