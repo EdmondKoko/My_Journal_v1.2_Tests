@@ -27,7 +27,7 @@ class PostUrlsTest(TestCase):
 
     def test_guest_pages(self):
         url_names = (
-            f'/',
+            '/',
             f'/group/{self.group.slug}/',
             f'/profile/{self.user.username}/',
             f'/posts/{self.post.id}/',
